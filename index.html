@@ -36,16 +36,64 @@ Descargar BAT
 
 <hr>
 
-
-<h3>2. Subir información del equipo</h3>
-
-<input type="file" multiple>
+<input type="file" id="archivos" multiple>
 
 <br><br>
 
-<button>
+<button onclick="subir()">
 Enviar archivos
 </button>
+
+<p id="estado"></p>
+
+
+<script>
+
+const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzt8qVr0t6OYxK4pM0zwyqtoqV9lJ_fRo6M8UBBG_wa50f_efWLfBN8NxjvGR4Hv0f8/exec";
+
+
+function subir(){
+
+let archivos = document.getElementById("archivos").files;
+
+if(archivos.length == 0){
+    alert("Seleccione archivos");
+    return;
+}
+
+
+for(let i=0;i<archivos.length;i++){
+
+let lector = new FileReader();
+
+lector.onload = function(){
+
+let base64 = lector.result.split(",")[1];
+
+let datos = new URLSearchParams();
+
+datos.append("archivo", archivos[i].name);
+datos.append("datos", base64);
+
+
+fetch(URL_SCRIPT,{
+    method:"POST",
+    body:datos
+})
+.then(respuesta=>{
+    document.getElementById("estado").innerHTML =
+    "Archivos enviados";
+});
+
+};
+
+lector.readAsDataURL(archivos[i]);
+
+}
+
+}
+
+</script>
 
 
 </body>
