@@ -2,23 +2,6 @@
 <html>
 <head>
 <title>Inventario Equipos</title>
-
-<style>
-body{
-    font-family: Arial;
-    margin:40px;
-}
-
-button{
-    padding:10px;
-    background:#0066cc;
-    color:white;
-    border:0;
-    cursor:pointer;
-}
-
-</style>
-
 </head>
 
 <body>
@@ -36,11 +19,14 @@ Descargar BAT
 
 <hr>
 
+
+<h3>2. Subir archivos</h3>
+
 <input type="file" id="archivos" multiple>
 
 <br><br>
 
-<button onclick="subir()">
+<button onclick="subirArchivos()">
 Enviar archivos
 </button>
 
@@ -49,47 +35,22 @@ Enviar archivos
 
 <script>
 
-const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzt8qVr0t6OYxK4pM0zwyqtoqV9lJ_fRo6M8UBBG_wa50f_efWLfBN8NxjvGR4Hv0f8/exec";
-
-
-function subir(){
+function subirArchivos(){
 
 let archivos = document.getElementById("archivos").files;
 
 if(archivos.length == 0){
-    alert("Seleccione archivos");
-    return;
-}
 
+document.getElementById("estado").innerHTML =
+"No hay archivos seleccionados";
 
-for(let i=0;i<archivos.length;i++){
-
-let lector = new FileReader();
-
-lector.onload = function(){
-
-let base64 = lector.result.split(",")[1];
-
-let datos = new URLSearchParams();
-
-datos.append("archivo", archivos[i].name);
-datos.append("datos", base64);
-
-
-fetch(URL_SCRIPT,{
-    method:"POST",
-    body:datos
-})
-.then(respuesta=>{
-    document.getElementById("estado").innerHTML =
-    "Archivos enviados";
-});
-
-};
-
-lector.readAsDataURL(archivos[i]);
+return;
 
 }
+
+document.getElementById("estado").innerHTML =
+"Botón funcionando. Archivos seleccionados: "
++ archivos.length;
 
 }
 
